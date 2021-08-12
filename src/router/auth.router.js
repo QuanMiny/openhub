@@ -6,6 +6,10 @@ const {
     login
 } = require('../controller/auth.controller');
 
-authRouter.post('/login', login);
+const {
+    verifyLogin
+} = require('../middleware/auth.middleware');
+
+authRouter.post('/login', verifyLogin, login);
 
 module.exports = authRouter;
