@@ -4,7 +4,7 @@ class UserService {
     async create(user) {
         const { name, password } = user;
 
-        const statement = `INSERT INTO users (name, password) VALUES (?, ?);`
+        const statement = `INSERT INTO user (name, password) VALUES (?, ?);`
         //  将 user 存储到数据库中
         const result = await connection.execute(statement, [name, password]);
         // 返回数据
@@ -12,7 +12,7 @@ class UserService {
     }
 
     async getUserByName(name) {
-        const statement = `SELECT * FROM users WHERE name = ?;`
+        const statement = `SELECT * FROM user WHERE name = ?;`
         const result = await connection.execute(statement, [name]);
         return result[0];
     }
