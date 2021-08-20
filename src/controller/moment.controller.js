@@ -17,7 +17,15 @@ class MomentController {
     const momentId = ctx.params.momentId;
     // 2.根据id去查询数据
     const result = await momentService.getMomentById(momentId);
+    ctx.body = result;
+  }
 
+  async list(ctx, next) {
+    // 1.获取数据(offset, size)
+    const { offset, size } = ctx.query;
+
+    // 2.查询列表
+    const result = await momentService.getMomentList(offset, size);
     ctx.body = result;
   }
 }
