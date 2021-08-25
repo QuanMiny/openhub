@@ -1,5 +1,4 @@
 const connection = require("../app/database");
-const momentRouter = require("../router/moment.router");
 
 const sqlFragment = `
     SELECT 
