@@ -28,6 +28,15 @@ class MomentController {
     const result = await momentService.getMomentList(offset, size);
     ctx.body = result;
   }
+
+  async update(ctx, next) {
+    // 解构
+    const { momentId } = ctx.params;
+    const { content } = ctx.request.body;
+    // 更新动态内容
+    const result = await momentService.update(content, momentId);
+    ctx.body = result;
+  }
 }
 
 module.exports = new MomentController();

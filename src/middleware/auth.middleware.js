@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 
 const errorTypes = require("../constants/error-types");
-const service = require("../service/user.service"); // userService
+const userService = require("../service/user.service"); // userService
+const authService = require("../service/auth.service"); // authService
 const md5password = require("../utils/password-handle");
 const { PUBLIC_KEY } = require("../app/config");
 
@@ -16,7 +17,7 @@ const verifyLogin = async (ctx, next) => {
   }
 
   // 3.判断用户是否存在（用户不存在）
-  const result = await service.getUserByName(name);
+  const result = await userService.getUserByName(name);
   const user = result[0];
   if (!user) {
     const error = new Error(errorTypes.USER_NOT_EXISTS);
@@ -35,7 +36,7 @@ const verifyLogin = async (ctx, next) => {
 };
 
 const verifyAuth = async (ctx, next) => {
-  // 1.获取请求头授权信息 token 
+  // 1.获取请求头授权信息 token
   const authorization = ctx.headers.authorization;
   // 判断是否授权
   if (!authorization) {
@@ -57,7 +58,24 @@ const verifyAuth = async (ctx, next) => {
   }
 };
 
+const verifyPermission = async (ctx, next) => {
+  // 1.获取参数
+  const { momentId } = ctx.params;
+  const { id } = ctx.user;
+
+  // 2.查询是否具备权限
+  try {
+    const isPermission = await authService.checkMoment(momentId, id);
+    if (!isPermission) throw new Error();
+    await next();
+  } catch (err) {
+    const error = new Error(errorTypes.UNPERMISSION);
+    return ctx.app.emit("error", error, ctx);
+  }
+};
+
 module.exports = {
   verifyLogin,
   verifyAuth,
+  verifyPermission,
 };
