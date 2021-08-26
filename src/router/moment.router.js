@@ -12,12 +12,14 @@ const {
   detail,
   list,
   update,
+  remove
 } = require("../controller/moment.controller");
 
 momentRouter.post("/", verifyAuth, create);
 momentRouter.get("/", list);
 momentRouter.get("/:momentId", detail);
-// 1.用户必须登录 2.用户具备权限
+// 修改动态 1.用户必须登录 2.用户具备权限
 momentRouter.patch("/:momentId", verifyAuth, verifyPermission, update);
+momentRouter.delete("/:momentId", verifyAuth, verifyPermission, remove);
 
 module.exports = momentRouter;
