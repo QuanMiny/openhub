@@ -15,6 +15,12 @@ class CommentController {
     const result = await service.reply(momentId, content, commentId, id);
     ctx.body = result;
   }
+
+  async update(ctx, next) {
+    const { commentId, content } = ctx.request.body;
+    const result = await service.update(commentId, content);
+    ctx.body = result;
+  }
 }
 
 module.exports = new CommentController();
