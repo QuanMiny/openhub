@@ -60,12 +60,13 @@ const verifyAuth = async (ctx, next) => {
 
 const verifyPermission = async (ctx, next) => {
   // 1.获取参数
-  const { momentId } = ctx.params;
+  const [ resourceKey ] = Object.keys(ctx.params);
+  const tableName = resourceKey.replace('Id', '');
+  const resourceId = ctx.params[resourceKey];
   const { id } = ctx.user;
-
   // 2.查询是否具备权限
   try {
-    const isPermission = await authService.checkMoment(momentId, id);
+    const isPermission = await authService.checkResource(tableName, resourceId, id);
     if (!isPermission) throw new Error();
     await next();
   } catch (err) {
