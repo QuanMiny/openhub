@@ -43,6 +43,12 @@ class MomentController {
     const result = await momentService.remove(momentId);
     ctx.body = result;
   }
+
+  async addLabels(ctx, next) {
+    const { labels } = ctx.request.body;
+    console.log(labels);
+    ctx.body = '添加标签'
+  }
 }
 
 module.exports = new MomentController();
