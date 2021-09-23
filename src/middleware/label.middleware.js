@@ -18,10 +18,7 @@ const verifyLabelExists = async (ctx, next) => {
     }
     newLabels.push(label);
   }
-  console.log(newLabels);
-
   ctx.labels = newLabels;
-
   await next();
 };
 
