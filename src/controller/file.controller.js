@@ -1,4 +1,6 @@
 const fileService = require("../service/file.service");
+const userService = require("../service/user.service");
+const {APP_HOST, APP_PORT} = require("../app/config")
 
 class FileController {
   async saveAvatarInfo(ctx, next) {
@@ -7,7 +9,11 @@ class FileController {
 
     const result = await fileService.createAvatar(filename, mimetype, size, id);
 
-    ctx.body = result;
+    // 保存图片地址
+    const avatarUrl = `${APP_HOST}:${APP_PORT}/users/${id}/avatar`;
+    await userService.updateAvatarUrlById(avatarUrl, id);
+
+    ctx.body = '上传头像成功';
   }
 }
 
