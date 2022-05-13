@@ -12,7 +12,11 @@ class UserController {
         const result = await userService.create(user);
 
         // 返回数据
-        ctx.body = result;
+        ctx.body = {
+            code: 200,
+            msg: "用户注册成功~",
+            data: null
+        };
     }
 
     async avatarInfo(ctx, next) {

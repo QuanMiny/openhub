@@ -13,7 +13,11 @@ class MomentController {
 
     // 2.将数据插入到数据库
     const result = await momentService.create(userId, content);
-    ctx.body = result;
+    ctx.body = {
+      code: 200,
+      msg: "发布成功~",
+      data: null
+    };
   }
 
   async detail(ctx, next) {
@@ -21,7 +25,11 @@ class MomentController {
     const momentId = ctx.params.momentId;
     // 2.根据id去查询数据
     const result = await momentService.getMomentById(momentId);
-    ctx.body = result;
+    ctx.body = {
+      code: 200,
+      msg: "获取成功~",
+      data: result
+    };
   }
 
   async list(ctx, next) {
@@ -30,7 +38,11 @@ class MomentController {
 
     // 2.查询列表
     const result = await momentService.getMomentList(offset, size);
-    ctx.body = result;
+    ctx.body = {
+      code: 200,
+      msg: "获取成功~",
+      data: result
+    };
   }
 
   async update(ctx, next) {
@@ -39,13 +51,21 @@ class MomentController {
     const { content } = ctx.request.body;
     // 更新动态内容
     const result = await momentService.update(content, momentId);
-    ctx.body = result;
+    ctx.body = {
+      code: 200,
+      msg: "更新成功~",
+      data: null
+    };
   }
 
   async remove(ctx, next) {
     const { momentId } = ctx.params;
     const result = await momentService.remove(momentId);
-    ctx.body = result;
+    ctx.body = {
+      code: 200,
+      msg: "删除成功~",
+      data: null
+    };
   }
 
   async addLabels(ctx, next) {
@@ -60,8 +80,11 @@ class MomentController {
         await momentService.addLabel(momentId, label.id);
       }
     }
-
-    ctx.body = "添加标签成功~";
+    ctx.body = {
+      code: 200,
+      msg: "添加标签成功~",
+      data: null
+    };
   }
 
   async fileInfo(ctx, next) {
