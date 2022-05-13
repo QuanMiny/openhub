@@ -28,13 +28,23 @@ const errorHandler = (error, ctx) => {
       status = 401; // 参数错误
       message = "没有权限~";
       break;
+    case errorTypes.LABEL_ALREADY_EXISTS:
+        status = 409; // Conflict
+        message = "标签已经存在~";
+        break;
     default:
       status = 404;
       message = "NOT FOUND.";
   }
+  ctx.body = {
+    code: status || -1,
+    data: null,
+    msg: message || '失败',
+  };
 
-  ctx.status = status;
-  ctx.body = message;
+  // 保证返回状态是 200, 这样前端不会抛出异常
+  ctx.status = 200
+  
 };
 
 module.exports = errorHandler;

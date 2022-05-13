@@ -1,4 +1,17 @@
+const errorTypes = require("../constants/error-types");
 const service = require("../service/label.service");
+
+const verifyNewLabel = async (ctx, next) => {
+  // 1.添加的标签
+  const { name } = ctx.request.body;
+  // 2.判断标签在label表中是否存在
+  const labelResult = await service.getLabelByName(name);
+  if (labelResult) {
+    const error = new Error(errorTypes.LABEL_ALREADY_EXISTS);
+    return ctx.app.emit("error", error, ctx);
+  }
+  await next();
+};
 
 const verifyLabelExists = async (ctx, next) => {
   // 1.取出要添加的所有标签
@@ -24,4 +37,5 @@ const verifyLabelExists = async (ctx, next) => {
 
 module.exports = {
   verifyLabelExists,
+  verifyNewLabel,
 };
