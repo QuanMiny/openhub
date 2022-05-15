@@ -27,6 +27,16 @@ class UserController {
         ctx.response.set('content-type', avatarInfo.mimetype);
         ctx.body = fs.createReadStream(`${AVATAR_PATH}/${avatarInfo.filename}`);
     }
+
+    async userInfo(ctx, next) {
+        const { userId } = ctx.params;
+        const result = await userService.getUserInfoById(userId);
+        ctx.body = {
+            code: 200,
+            msg: "获取成功~",
+            data: result
+        };
+    }
 }
 
 module.exports = new UserController();

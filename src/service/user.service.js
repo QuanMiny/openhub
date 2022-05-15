@@ -17,6 +17,17 @@ class UserService {
         return result[0];
     }
 
+    async getUserInfoById(userId) {
+        const statement = `
+        SELECT 
+            u.id, u.name, u.avatar_url,
+		    (SELECT COUNT(*) FROM moment m WHERE m.user_id = u.id) momentCount
+        FROM user u
+        WHERE u.id = ?;`
+        const [result] = await connection.execute(statement, [userId]);
+        return result[0];
+    }
+
     async updateAvatarUrlById(avatarUrl, userId) {
         const statement = `UPDATE user SET avatar_url = ? WHERE id = ?;`;
         const [result] = await connection.execute(statement, [avatarUrl, userId]);
