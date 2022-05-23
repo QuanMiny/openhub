@@ -18,11 +18,13 @@ const {
   update,
   remove,
   addLabels,
-  fileInfo
+  fileInfo,
+  listByUserId
 } = require("../controller/moment.controller");
 
 momentRouter.post("/", verifyAuth, create);
 momentRouter.get("/", list);
+momentRouter.get("/:userId", listByUserId);
 momentRouter.get("/:momentId", detail);
 // 修改动态 1.用户必须登录 2.用户具备权限
 momentRouter.patch("/:momentId", verifyAuth, verifyPermission, update);

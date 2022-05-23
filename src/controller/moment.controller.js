@@ -3,6 +3,7 @@ const fs = require('fs');
 const fileService = require("../service/file.service");
 const momentService = require("../service/moment.service");
 const { PICTURE_PATH } = require("../constants/file-path");
+const userService = require('../service/user.service');
 
 class MomentController {
   async create(ctx, next) {
@@ -42,6 +43,24 @@ class MomentController {
       code: 200,
       msg: "获取成功~",
       data: result
+    };
+  }
+
+  async listByUserId(ctx, next) {
+    // 1.获取数据(offset, size)
+    const { userId } = ctx.params;
+    const { offset, size } = ctx.query;
+
+    // 2.查询列表
+    const result = await momentService.getMomentListByUserId(userId, offset, size);
+    const userInfo = await userService.getUserInfoById(userId)
+    ctx.body = {
+      code: 200,
+      msg: "获取成功~",
+      data: {
+        userInfo: userInfo,
+        momentUserList: result
+      }
     };
   }
 

@@ -61,6 +61,22 @@ class MomentService {
     return result;
   }
 
+  async getMomentListByUserId(user_id, offset, size) {
+    const statement = `
+        SELECT 
+          m.id id, m.content content, m.createAt createTime, m.updateAt updateTime,
+          (SELECT COUNT(*) FROM comment c WHERE c.moment_id = m.id) commentCount,
+          (SELECT COUNT(*) FROM moment_label ml WHERE ml.moment_id = m.id) labelCount,
+          (SELECT JSON_ARRAYAGG(CONCAT('${APP_HOST}:${APP_PORT}/moment/images/', file.filename))
+          FROM file WHERE m.id = file.moment_id) images
+        FROM moment m WHERE m.user_id = ?
+        ORDER BY m.updateAt DESC
+        LIMIT ?, ?
+      `;
+    const [result] = await connection.execute(statement, [user_id, offset, size]);
+    return result;
+  }
+
   async update(content, momentId) {
     const statement = `UPDATE moment SET content = ? WHERE id = ?`;
     const [result] = await connection.execute(statement, [content, momentId]);
