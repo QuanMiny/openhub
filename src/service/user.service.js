@@ -20,8 +20,7 @@ class UserService {
     async getUserInfoById(userId) {
         const statement = `
         SELECT 
-            u.id, u.name, u.avatar_url,
-		    (SELECT COUNT(*) FROM moment m WHERE m.user_id = u.id) momentCount
+            u.id, u.name, u.avatar_url
         FROM user u
         WHERE u.id = ?;`
         const [result] = await connection.execute(statement, [userId]);
