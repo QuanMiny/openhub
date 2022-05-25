@@ -24,8 +24,8 @@ const {
 
 momentRouter.post("/", verifyAuth, create);
 momentRouter.get("/", list);
-momentRouter.get("/:userId", listByUserId);
 momentRouter.get("/:momentId", detail);
+momentRouter.get("/user/:userId", listByUserId);
 // 修改动态 1.用户必须登录 2.用户具备权限
 momentRouter.patch("/:momentId", verifyAuth, verifyPermission, update);
 momentRouter.delete("/:momentId", verifyAuth, verifyPermission, remove);

@@ -77,6 +77,15 @@ class MomentService {
     return result;
   }
 
+  async getMomentCountById(userId) {
+    const statement = `
+      SELECT COUNT(*) momentUserCount
+      FROM moment m
+      WHERE m.user_id = ?`
+    const [result] = await connection.execute(statement, [userId]);
+    return result[0];
+}
+
   async update(content, momentId) {
     const statement = `UPDATE moment SET content = ? WHERE id = ?`;
     const [result] = await connection.execute(statement, [content, momentId]);
