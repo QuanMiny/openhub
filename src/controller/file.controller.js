@@ -36,6 +36,25 @@ class FileController {
       data: null,
     };
   }
+
+  async savePictureWithId(ctx, next) {
+    // 1.获取图像信息
+    const files = ctx.req.files;
+    const { id } = ctx.user;
+    const momentId = ctx.momentId;
+    
+    // 2.将所有的文件信息保存到数据库中
+    for (let file of files) {
+      const { filename, mimetype, size } = file;
+      await fileService.createFile(filename, mimetype, size, id, momentId);
+    }
+
+    ctx.body = {
+      code: 200,
+      msg: "发布成功~",
+      data: null,
+    };
+  }
 }
 
 module.exports = new FileController();

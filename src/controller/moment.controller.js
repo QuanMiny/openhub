@@ -20,6 +20,42 @@ class MomentController {
     };
   }
 
+  async createMoment(ctx, next) {
+    const userId = ctx.user.id;
+    try {
+      const content = ctx.req.body.content;
+      const files = ctx.req.files;
+      
+    //   前端判断
+    // 1. 如果内容为空 图片为空 无触发
+    // 3. 如果有内容 图片为空 创建动态 直接完成 
+    // 2. 如果内容为空 有图片 创建空文本动态 并上传图片 next()
+    // 4. 如果有内容 有图片 创建动态 并上传图片 next()
+
+    if(files.length == 0) {
+      // 将数据插入到数据库
+      const result = await momentService.create(userId, content);
+      ctx.body = {
+        code: 200,
+        msg: "发布成功~",
+        data: result
+      };
+    } else {
+      // 不管content内容 可上传空文本
+      const result = await momentService.create(userId, content);
+      // 用于图片上传
+      ctx.momentId = result.insertId
+      await next();
+    }
+
+    } catch (error) {
+      console.log(error);
+    }
+
+
+    
+  }
+
   async detail(ctx, next) {
     // 1.获取数据(momentId)
     const momentId = ctx.params.momentId;
