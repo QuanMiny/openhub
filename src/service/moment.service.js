@@ -1,9 +1,9 @@
-const {APP_HOST, APP_PORT} = require("../app/config")
+const { APP_HOST, APP_PORT } = require("../app/config");
 
 const connection = require("../app/database");
 
 // const sqlFragment = `
-//     SELECT 
+//     SELECT
 //         m.id id, m.content content, m.createAt createTime, m.updateAt updateTime,
 //         JSON_OBJECT('id', u.id, 'name', u.name) author
 //     FROM moment m
@@ -73,18 +73,31 @@ class MomentService {
         ORDER BY m.updateAt DESC
         LIMIT ?, ?
       `;
-    const [result] = await connection.execute(statement, [user_id, offset, size]);
+    const [result] = await connection.execute(statement, [
+      user_id,
+      offset,
+      size,
+    ]);
     return result;
+  }
+
+  // 获取动态总数
+  async getMomentCount() {
+    const statement = `
+      SELECT COUNT(*) momentCount
+      FROM moment m;`
+    const [result] = await connection.execute(statement);
+    return result[0].momentCount;
   }
 
   async getMomentCountById(userId) {
     const statement = `
       SELECT COUNT(*) momentUserCount
       FROM moment m
-      WHERE m.user_id = ?`
+      WHERE m.user_id = ?`;
     const [result] = await connection.execute(statement, [userId]);
     return result[0];
-}
+  }
 
   async update(content, momentId) {
     const statement = `UPDATE moment SET content = ? WHERE id = ?`;
